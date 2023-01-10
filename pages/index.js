@@ -1,7 +1,9 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css';
 
-export default function Home() {
+
+
+export default function Home({ time }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -11,7 +13,7 @@ export default function Home() {
 
       <main>
         <h1 className={styles.title}>
-          Try <a href="https://nextjs.org">Next.js!</a>
+          Try <a href="https://nextjs.org">Next.js!</a> at {time}
         </h1>
 
         <p className={styles.description}>
@@ -112,4 +114,18 @@ export default function Home() {
       `}</style>
     </div>
   )
+}
+
+/*export async function getServerSideProps(context) {
+  const now = Date.now();
+  return {
+    props: {time: now}, 
+  }
+}*/
+
+export async function getStaticProps(context) {
+  const now = Date.now();
+  return {
+    props: {time: now}, 
+  }
 }
