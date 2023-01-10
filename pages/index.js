@@ -123,7 +123,7 @@ export default function Home({ time, articles }) {
 // getStaticProps 
 // getServerSideProps
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
   let articles = [];
 
   let PROJECT_ID = "ba3wzino";
@@ -144,8 +144,6 @@ export async function getServerSideProps(context) {
       }
     })
     .catch((err) => console.error(err));
-
-  console.info(articles);
 
   const date = new Date();
   var now = date.toLocaleTimeString();
