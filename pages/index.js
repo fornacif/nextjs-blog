@@ -3,7 +3,8 @@ import styles from '../styles/Home.module.css';
 
 
 
-export default function Home({ time }) {
+export default function Home({ time, articles }) {
+  console.info(articles);
   return (
     <div className={styles.container}>
       <Head>
@@ -17,8 +18,11 @@ export default function Home({ time }) {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
+          Articles
         </p>
+        {articles.map((article) => (
+            <p>{article.title} - {article.description}</p>
+          ))}
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
@@ -116,18 +120,36 @@ export default function Home({ time }) {
   )
 }
 
-/*export async function getServerSideProps(context) {
-  const date = new Date();
-  var now = date.toLocaleTimeString();
-  return {
-    props: {time: now}, 
-  }
-}*/
+// getStaticProps 
+// getServerSideProps
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
+  let articles = [];
+
+  let PROJECT_ID = "ba3wzino";
+  let DATASET = "production";
+  let QUERY = encodeURIComponent('*[_type == "article"]{title,description}');
+
+  // Compose the URL for your project's endpoint and add the query
+  let URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
+
+  // fetch the content
+  await fetch(URL)
+    .then((res) => res.json())
+    .then(({ result }) => {
+      if (result.length > 0) {
+        result.forEach((article) => {
+          articles.push({title: article?.title, description: article?.description});
+        });
+      }
+    })
+    .catch((err) => console.error(err));
+
+  console.info(articles);
+
   const date = new Date();
   var now = date.toLocaleTimeString();
   return {
-    props: {time: now}, 
+    props: {time: now, articles: articles}, 
   }
 }
