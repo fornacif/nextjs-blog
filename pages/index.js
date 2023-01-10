@@ -117,14 +117,16 @@ export default function Home({ time }) {
 }
 
 /*export async function getServerSideProps(context) {
-  const now = Date.now();
+  const date = new Date();
+  var now = date.toLocaleTimeString();
   return {
     props: {time: now}, 
   }
 }*/
 
 export async function getStaticProps(context) {
-  const now = Date.now();
+  const date = new Date();
+  var now = date.toLocaleTimeString();
   return {
     props: {time: now}, 
   }
